@@ -33,7 +33,6 @@ EZI.T/
 │── docs/              # Project documentation
 │── .gitignore         # Files to be ignored by Git
 │── README.md          # Project description and setup
-│── LICENSE            # License (if applicable)
 ```
 
 ## **Getting Started**  
