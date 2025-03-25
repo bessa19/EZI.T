@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:padding="@dimen/spacing_20dp"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imgGate"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/padlock_retro"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/Status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bluetooth_already_enabled"
+        android:textSize="@dimen/text_size_1"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/imgGate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/spacing_20dp"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <Button
+        android:id="@+id/btnOpenGate"
+        style="@style/ButtonStyle"
+        android:text="@string/open_gate"
+        app:layout_constraintTop_toBottomOf="@id/Status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/spacing_20dp"/>
+
+    <Button
+        android:id="@+id/btnConnect"
+        style="@style/ButtonStyle"
+        android:text="@string/connect_bluetooth"
+        app:layout_constraintTop_toBottomOf="@id/btnOpenGate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="@dimen/spacing_20dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ezit_app</string>
+    <string name="bluetooth_not_supported">Bluetooth not supported on this device</string>
+    <string name="bluetooth_already_enabled">Bluetooth is already enabled!</string>
+    <string name="bluetooth_enabled">Bluetooth enabled!</string>
+    <string name="bluetooth_failed">Bluetooth enabling failed!</string>
+    <string name="connect_bluetooth">Connect Bluetooth</string>
+    <string name="open_gate">Open Gate</string>
+</resources>
