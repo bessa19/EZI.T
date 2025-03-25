@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="button_height">80dp</dimen>
-    <dimen name="button_width">180dp</dimen>
+    <dimen name="button_height">120dp</dimen>
+    <dimen name="button_width">220dp</dimen>
     <dimen name="button_margin">16dp</dimen>
-    <dimen name="text_size_1">18sp</dimen>
+    <dimen name="text_size_1">80sp</dimen>
+    <dimen name="btn_text_size">30sp</dimen>
+    <dimen name="img_lock_dimen">300dp</dimen>
 
     <dimen name="spacing_20dp">20dp</dimen>
+    <dimen name="spacing_40dp">40dp</dimen>
+    <dimen name="spacing_60dp">60dp</dimen>
+    <dimen name="spacing_100dp">100dp</dimen>
+    <dimen name="spacing_120dp">120dp</dimen>
+    <dimen name="spacing_140dp">140dp</dimen>
+    <dimen name="spacing_160dp">160dp</dimen>
 </resources>

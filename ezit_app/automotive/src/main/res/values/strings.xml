@@ -6,4 +6,7 @@
     <string name="bluetooth_failed">Bluetooth enabling failed!</string>
     <string name="connect_bluetooth">Connect Bluetooth</string>
     <string name="open_gate">Open Gate</string>
+    <string name="access_granted">Gate Opened Successfully!</string>
+    <string name="access_denied">Access Denied! Unauthorized User!</string>
+    <string name="invalid">INVALID REQUEST</string>
 </resources>

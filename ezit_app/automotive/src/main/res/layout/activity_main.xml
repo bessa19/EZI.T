@@ -11,13 +11,12 @@
 
     <ImageView
         android:id="@+id/imgGate"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/img_lock_dimen"
+        android:layout_height="@dimen/img_lock_dimen"
         android:src="@drawable/padlock_retro"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/Status"
@@ -29,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@id/imgGate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/spacing_20dp"
+        android:layout_marginTop="@dimen/spacing_100dp"
         app:layout_constraintHorizontal_bias="0.5"/>
 
     <Button
@@ -39,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/Status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/spacing_20dp"/>
+        android:layout_marginTop="@dimen/spacing_140dp"/>
 
     <Button
         android:id="@+id/btnConnect"
