@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         intArrayOf(69, 96, 96, 58)
     )
 
+    // Retrieves the value asked for on the matrix
     private fun getMatrixValue(row: Int, col: Int): Int{
         return securityMatrix[row][col]
     }
@@ -35,18 +36,6 @@ class MainActivity : AppCompatActivity() {
         val expectedValue = getMatrixValue(row, col)
         //sendBluetoothMessage(expectedValue.toString())
     }
-
-//    fun onEsp32Response(response: String) {
-//        runOnUiThread {
-//            if (response == "ACCESS_GRANTED") {
-//                binding.Status.text = R.string.access_granted.toString()
-//                binding.Status.setTextColor(Color.GREEN)
-//            } else {
-//                binding.Status.text = R.string.access_denied.toString()
-//                binding.Status.setTextColor(Color.RED)
-//            }
-//        }
-//    }
 
 //HARD CODED function for security testing
     private fun simulateEsp32(){
@@ -91,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         // Here is where i need to add functionality to check security and open the gate
         binding.btnOpenGate.setOnClickListener {
-            //onEsp32Response(3, 2)
+
             simulateEsp32()
         }
     }
@@ -114,3 +103,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 }
+
+
+// CODE DUMP: THIS SERVES THE PURPOSE OF ADDING CODE THAT IS GOING TO BE LATER IMPLEMENTED
+
+//    fun onEsp32Response(response: String) {
+//        runOnUiThread {
+//            if (response == "ACCESS_GRANTED") {
+//                binding.Status.text = R.string.access_granted.toString()
+//                binding.Status.setTextColor(Color.GREEN)
+//            } else {
+//                binding.Status.text = R.string.access_denied.toString()
+//                binding.Status.setTextColor(Color.RED)
+//            }
+//        }
+//    }
