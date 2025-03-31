@@ -28,17 +28,17 @@ class MainActivity : AppCompatActivity() {
     )
 
     // Retrieves the value asked for on the matrix
-    private fun getMatrixValue(row: Int, col: Int): Int{
+    private fun getMatrixValue(row: Int, col: Int): Int {
         return securityMatrix[row][col]
     }
 
-    fun onSecurityCheckRequest(row: Int, col: Int){
+    fun onSecurityCheckRequest(row: Int, col: Int) {
         val expectedValue = getMatrixValue(row, col)
         //sendBluetoothMessage(expectedValue.toString())
     }
 
-//HARD CODED function for security testing
-    private fun simulateEsp32(){
+    //HARD CODED function for security testing
+    private fun simulateEsp32() {
         val requestedRow = 1
         val requestedCol = 2
 
