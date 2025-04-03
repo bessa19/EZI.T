@@ -16,8 +16,8 @@ void setup() {
   pService = pServer->createService(BLEUUID((uint16_t)0x180F)); // Generic Service
 
   pCharacteristic = pService -> createCharacteristic(
-      BLEUUID((uint16_t)0x2A19), // Generic Characteristic
-      BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
+    BLEUUID((uint16_t)0x2A19), // Generic Characteristic
+    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
   );
 
   pCharacteristic -> setValue("Hello from ESP32!");
@@ -27,5 +27,5 @@ void setup() {
 }
 
 void loop() {
-    delay(2000);
+  delay(2000);
 }
