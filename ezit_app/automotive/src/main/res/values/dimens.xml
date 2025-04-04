@@ -4,6 +4,7 @@
     <dimen name="button_width">220dp</dimen>
     <dimen name="button_margin">16dp</dimen>
     <dimen name="text_size_1">80sp</dimen>
+    <dimen name="text_size_2">40sp</dimen>
     <dimen name="btn_text_size">30sp</dimen>
     <dimen name="img_lock_dimen">300dp</dimen>
 

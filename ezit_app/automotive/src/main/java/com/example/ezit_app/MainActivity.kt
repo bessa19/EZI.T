@@ -13,11 +13,117 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ezit_app.databinding.ActivityMainBinding
 import android.view.animation.AnimationUtils
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
+import android.content.pm.PackageManager
+import java.io.IOException
+import java.util.UUID
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private lateinit var binding: ActivityMainBinding
+
+    private var btSocket: BluetoothSocket? = null
+    private var btDevice: BluetoothDevice? = null
+    private var outputStream: java.io.OutputStream? = null
+    private var inputStream: java.io.InputStream? = null
+
+    private val EZI_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // SPP UUID
+    private val DEVICE_NAME = "EZI.T-Gate" // ESP32 Bluetooth name
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ){ permissions ->
+        val granted = permissions.entries.all { it.value }
+        if (granted){
+            connectToDevice()
+        } else {
+            Toast.makeText(this, "Bluetooth permissions are required", Toast.LENGTH_SHORT)
+        }
+    }
+
+    private fun checkBluetoothPermissions(): Boolean{
+        val permissionsNeeded = mutableListOf<String>()
+
+        if (checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(android.Manifest.permission.BLUETOOTH_CONNECT)
+        }
+
+        if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        return if (permissionsNeeded.isNotEmpty()) {
+            requestPermissionLauncher.launch(permissionsNeeded.toTypedArray())
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun connectToDevice(){
+        if (checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Missing Bluetooth permission", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
+        btDevice = pairedDevices.find { it.name == DEVICE_NAME }
+
+        if (btDevice == null){
+            binding.btStatus.text = R.string.not_found_device.toString()
+            binding.btStatus.setTextColor(Color.YELLOW)
+        }
+
+        thread {
+            try {
+                btSocket = btDevice!!.createRfcommSocketToServiceRecord(EZI_UUID)
+                btSocket!!.connect()
+                outputStream = btSocket!!.outputStream
+                inputStream = btSocket!!.inputStream
+
+                runOnUiThread{
+                    binding.btStatus.text = R.string.connected_bluetooth.toString()
+                    binding.btStatus.setTextColor(Color.CYAN)
+                }
+            }catch (e: IOException){
+                e.printStackTrace()
+                runOnUiThread {
+                    binding.btStatus.text = R.string.connected_bluetooth_failed.toString()
+                    binding.btStatus.setTextColor(Color.RED)
+                }
+            }
+        }
+    }
+
+    private fun listenForEsp32Response(){
+        thread {
+            val buffer = ByteArray(1024)
+            while (true){
+                try {
+                    val bytes = inputStream?.read(buffer) ?: break
+                    val message = String(buffer, 0, bytes).trim()
+
+                    runOnUiThread {
+                        when (message){
+                            "AUTH_OK" -> {
+                                binding.Status.text = getString(R.string.access_granted)
+                                binding.Status.setTextColor(Color.GREEN)
+                            }
+                            "AUTH_FAIL" -> {
+                                binding.Status.text = getString(R.string.access_denied)
+                                binding.Status.setTextColor(Color.RED)
+                            }
+                            else -> {
+                                binding.Status.text = getString(R.string.unknown)
+                            }
+                        }
+                    }
+                }catch (e: IOException) { break }
+            }
+        }
+    }
 
     //for testing purposes for the security measures regarding matrix addition
     private val securityMatrix = arrayOf(
@@ -32,32 +138,19 @@ class MainActivity : AppCompatActivity() {
         return securityMatrix[row][col]
     }
 
-    fun onSecurityCheckRequest(row: Int, col: Int) {
+    private fun onSecurityCheckRequest(row: Int, col: Int) {
         val expectedValue = getMatrixValue(row, col)
-        //sendBluetoothMessage(expectedValue.toString())
+        val authString = "AUTH: $row,$col,$expectedValue\n"
+        sendBluetoothMessage(authString)
+        listenForEsp32Response()
     }
 
-    //HARD CODED function for security testing
-    private fun simulateEsp32() {
-        val requestedRow = 1
-        val requestedCol = 2
-
-        onEsp32Response(requestedRow, requestedCol)
-    }
-
-    private fun onEsp32Response(row: Int, col: Int) {
-        runOnUiThread {
-            if (row in 0..3 && col in 0..3) {
-                if (getMatrixValue(row, col) == 62) {
-                    binding.Status.text = getText(R.string.access_granted)
-                    binding.Status.setTextColor(Color.GREEN)
-                } else {
-                    binding.Status.text = getText(R.string.access_denied)
-                    binding.Status.setTextColor(Color.RED)
-                }
-            } else {
-                binding.Status.text = getText(R.string.invalid)
-                binding.Status.setTextColor(Color.YELLOW)
+    private fun sendBluetoothMessage(message: String) {
+        thread {
+            try {
+                outputStream?.write(message.toByteArray())
+            }catch (e: IOException){
+                e.printStackTrace()
             }
         }
     }
@@ -75,13 +168,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnConnect.setOnClickListener {
-            checkBluetooth()
+            if (checkBluetoothPermissions()) {
+                checkBluetooth()
+                connectToDevice()
+            }
         }
 
         // Here is where i need to add functionality to check security and open the gate
         binding.btnOpenGate.setOnClickListener {
-
-            simulateEsp32()
+            val row = 1  //randomize this number later on (number need to be compreended on the dimentions of the matrix)
+            val col = 2  //randomize this number later on (number need to be compreended on the dimentions of the matrix)
+            onSecurityCheckRequest(row, col)
         }
     }
 
@@ -104,17 +201,28 @@ class MainActivity : AppCompatActivity() {
         }
 }
 
-
-// CODE DUMP: THIS SERVES THE PURPOSE OF ADDING CODE THAT IS GOING TO BE LATER IMPLEMENTED
-
-//    fun onEsp32Response(response: String) {
+//HARD CODED function for security testing
+//    private fun simulateEsp32() {
+//        val requestedRow = 1
+//        val requestedCol = 2
+//
+//        onEsp32Response(requestedRow, requestedCol)
+//    }
+//  *************************************************************************************************
+// Hard coded version for UI tests
+//    private fun onEsp32Response(row: Int, col: Int) {
 //        runOnUiThread {
-//            if (response == "ACCESS_GRANTED") {
-//                binding.Status.text = R.string.access_granted.toString()
-//                binding.Status.setTextColor(Color.GREEN)
+//            if (row in 0..3 && col in 0..3) {
+//                if (getMatrixValue(row, col) == 62) {
+//                    binding.Status.text = getText(R.string.access_granted)
+//                    binding.Status.setTextColor(Color.GREEN)
+//                } else {
+//                    binding.Status.text = getText(R.string.access_denied)
+//                    binding.Status.setTextColor(Color.RED)
+//                }
 //            } else {
-//                binding.Status.text = R.string.access_denied.toString()
-//                binding.Status.setTextColor(Color.RED)
+//                binding.Status.text = getText(R.string.invalid)
+//                binding.Status.setTextColor(Color.YELLOW)
 //            }
 //        }
 //    }

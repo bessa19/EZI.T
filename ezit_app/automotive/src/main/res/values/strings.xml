@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name">ezit_app</string>
+    <string name="default_string">EZI.T app</string>
     <string name="bluetooth_not_supported">Bluetooth not supported on this device</string>
     <string name="bluetooth_already_enabled">Bluetooth is already enabled!</string>
     <string name="bluetooth_enabled">Bluetooth enabled!</string>
     <string name="bluetooth_failed">Bluetooth enabling failed!</string>
     <string name="connect_bluetooth">Connect Bluetooth</string>
+    <string name="not_found_device">Device not found!</string>
+    <string name="connected_bluetooth_failed">Connection failed</string>
+    <string name="connected_bluetooth">Connected to Device</string>
     <string name="open_gate">Open Gate</string>
     <string name="access_granted">Gate Opened Successfully!</string>
     <string name="access_denied">Access Denied! Unauthorized User!</string>
     <string name="invalid">INVALID REQUEST</string>
+    <string name="unknown">Unrecognized</string>
 </resources>
