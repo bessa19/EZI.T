@@ -56,3 +56,6 @@ cd EZI.T
 - **Cloud integration** – Remote access and monitoring.  
 - **Multiple user roles** – Access control for different users.  
 
+
+
+## ++ MEnSAGEMSFAONFIUAEB
